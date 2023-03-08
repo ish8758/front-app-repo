@@ -71,11 +71,12 @@ jobs:
           cat ./values-dev.yaml
 
       - name: Pushes to Cluster Ops Git repository
-        uses: cpina/github-action-push-to-another-repository@main
+        uses: dmnemec/copy_file_to_another_repo_action@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.ACTION_TOKEN }}
         with:
-          destination-github-username: 'ish8758'
-          destination-repository-name: 'k8s-manifest-repo'
-          target-branch: main
-          commit-message: "Update image version"
+          source_file: 'values-dev.yaml'
+          destination_repo: 'dmnemec/release-test'
+          destination_folder: '.'
+          commit_message: 'Update image version'
+        
