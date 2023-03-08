@@ -56,7 +56,7 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           
-      - name: Checkout DevOps Git
+      - name: Checkout Cluster Ops Git
         uses: actions/checkout@v2
         with:
           repository: ish8758/k8s-manifest-repo
@@ -67,10 +67,15 @@ jobs:
       - name: Update image version
         run: |
           version=$(cat ./values-dev.yaml | grep tag: | awk '{print $2}')
-          sed -i "s/$version/${{ steps.image.outputs.version }}/" ./values-dev.yaml      
+          sed -i "s/$version/${{ steps.image.outputs.version }}/" ./values-dev.yaml  
+          cat ./values.yaml
 
-      - name: Commit and push changes in DevOps Git
-        uses: devops-infra/action-commit-push@v0.3
+      - name: Pushes to Cluster Ops Git repository
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.ACTION_TOKEN }}
         with:
-          github_token: ${{ secrets.ACTION_TOKEN }}
-          commit_message: Version updated
+          destination-github-username: 'ish8758'
+          destination-repository-name: 'k8s-manifest-repo'
+          target-branch: main
+          commit-message: "Update image version"
