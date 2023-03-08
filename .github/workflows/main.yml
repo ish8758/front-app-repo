@@ -79,4 +79,5 @@ jobs:
           destination_repo: 'ish8758/k8s-manifest-repo'
           destination_folder: '.'
           commit_message: 'Update image version'
-        
+          user_name: 'ish8758'
+          user_email: 'Jenkinsish121@gmail.com'
