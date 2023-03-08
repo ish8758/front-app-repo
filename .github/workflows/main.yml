@@ -76,7 +76,7 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.ACTION_TOKEN }}
         with:
           source_file: 'values-dev.yaml'
-          destination_repo: 'dmnemec/release-test'
+          destination_repo: 'ish8758/k8s-manifest-repo'
           destination_folder: '.'
           commit_message: 'Update image version'
         
