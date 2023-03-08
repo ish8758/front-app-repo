@@ -68,7 +68,7 @@ jobs:
         run: |
           version=$(cat ./values-dev.yaml | grep tag: | awk '{print $2}')
           sed -i "s/$version/${{ steps.image.outputs.version }}/" ./values-dev.yaml  
-          cat ./values.yaml
+          cat ./values-dev.yaml
 
       - name: Pushes to Cluster Ops Git repository
         uses: cpina/github-action-push-to-another-repository@main
