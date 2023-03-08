@@ -55,3 +55,22 @@ jobs:
           echo "::set-output name=image_tag::$IMAGE_TAG"
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          
+      - name: Checkout DevOps Git
+        uses: actions/checkout@v2
+        with:
+          repository: ish8758/k8s-manifest-repo
+          ref: main
+          token: ${{ secrets.ACTION_TOKEN }}
+          path: .
+      
+      - name: Update image version
+        run: |
+          version=$(cat ./values-dev.yaml | grep tag: | awk '{print $2}')
+          sed -i "s/$version/${{ steps.image.outputs.version }}/" ./values-dev.yaml      
+
+      - name: Commit and push changes in DevOps Git
+        uses: devops-infra/action-commit-push@v0.3
+        with:
+          github_token: ${{ secrets.ACTION_TOKEN }}
+          commit_message: Version updated
